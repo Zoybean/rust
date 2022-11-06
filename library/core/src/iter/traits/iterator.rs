@@ -7,7 +7,7 @@ use super::super::ByRefSized;
 use super::super::TrustedRandomAccessNoCoerce;
 use super::super::{ArrayChunks, Chain, Cloned, Copied, Cycle, Enumerate, Filter, FilterMap, Fuse};
 use super::super::{FlatMap, Flatten};
-use super::super::{FromIterator, Intersperse, IntersperseWith, Product, Sum, Zip};
+use super::super::{FromIterator, Intersperse, IntersperseWith, Product, Sum, Zip, ZipClone};
 use super::super::{
     Inspect, Map, MapWhile, Peekable, Rev, Scan, Skip, SkipWhile, StepBy, Take, TakeWhile,
 };
@@ -620,6 +620,29 @@ pub trait Iterator {
         U: IntoIterator,
     {
         Zip::new(self, other.into_iter())
+    }
+
+    /// Creates a new iterator that yields pairs of this and clones of the
+    /// element `to_clone`.
+    ///
+    /// This iterator is *fused*.
+    ///
+    /// Intended for types that are expensive to clone, or that have some side
+    /// effects when cloned, this will not call `clone` more times than is
+    /// necessary to pair with each item of the underlying iterator,
+    /// effectively saving the final call to `clone`.
+    /// For an iterator with N > 1 elements, this calls clone at most N-1 times.
+    ///
+    /// For types that are distinguishable from their clones, this makes no
+    /// guarantees about the order in which the original and its clones are
+    /// yielded.
+    #[unstable(feature = "iter_zip_clones", reason = "recently added", issue = "none")]
+    fn zip_clones<C>(self, to_clone: C) -> ZipClone<Self, C>
+    where
+        Self: Sized,
+        C: Clone,
+    {
+        ZipClone::new(self, to_clone)
     }
 
     /// Creates a new iterator which places a copy of `separator` between adjacent

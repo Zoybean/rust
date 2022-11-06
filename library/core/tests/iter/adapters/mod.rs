@@ -21,6 +21,7 @@ mod step_by;
 mod take;
 mod take_while;
 mod zip;
+mod zip_clones;
 
 use core::cell::Cell;
 

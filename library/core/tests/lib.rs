@@ -104,6 +104,7 @@
 #![feature(provide_any)]
 #![feature(utf8_chunks)]
 #![feature(is_ascii_octdigit)]
+#![feature(iter_zip_clones)]
 #![deny(unsafe_op_in_unsafe_fn)]
 
 extern crate test;

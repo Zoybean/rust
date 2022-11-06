@@ -449,6 +449,9 @@ pub use self::adapters::{
 #[unstable(feature = "iter_intersperse", reason = "recently added", issue = "79524")]
 pub use self::adapters::{Intersperse, IntersperseWith};
 
+#[unstable(feature = "iter_zip_clones", reason = "recently added", issue = "none")]
+pub use self::adapters::ZipClone;
+
 pub(crate) use self::adapters::try_process;
 
 mod adapters;
